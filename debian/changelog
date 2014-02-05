@@ -1,0 +1,5 @@
+ganeti-failover-gateway-cluster (1.0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Cyril Bouthors <cyril@bouthors.org>  Wed, 05 Feb 2014 14:42:16 +0100

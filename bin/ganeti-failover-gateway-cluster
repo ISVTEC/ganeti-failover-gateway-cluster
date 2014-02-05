@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# Copyright (C) 2014 Cyril Bouthors <cyril@boutho.rs>
+#
+# This program is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
+target="$1"
+lockfile='/var/lock/ganeti-failover-gateway-cluster'
+
+set -e -o pipefail -o nounset
+
+# Check arguments
+if [ -z "$target" ]
+then
+    echo "$0: too few arguments" >&2
+    echo "Usage: $0 FILE" >&2
+    exit 1
+fi
+
+# Lock
+dotlockfile -r 0 -p $lockfile || exit
+
+# Create temporary file
+tempfile=$(tempfile)
+trap "rm -f $tempfile" EXIT HUP INT TRAP TERM
+
+# Fetch gateway IP address of each Ganeti node
+gnt-cluster command ip route show \
+    | awk '/^default via / {print $3}' \
+    | sort -u > $tempfile
+
+# Move temporary file to the final destination
+mv $tempfile $target
+
+# Remove lock
+dotlockfile -u $lockfile

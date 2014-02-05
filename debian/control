@@ -1,0 +1,13 @@
+Source: ganeti-failover-gateway-cluster
+Section: admin
+Priority: optional
+Maintainer: Cyril Bouthors <cyb@debian.org>
+Uploaders: Cyril Bouthors <cyril@boutho.rs>, Cyril Bouthors <cyril@bouthors.org>
+Build-Depends: debhelper (>= 5)
+Standards-Version: 3.9.4
+
+Package: ganeti-failover-gateway-cluster
+Architecture: all
+Depends: ganeti2, liblockfile-bin, ${misc:Depends}
+Description: Manage Ganeti instances gateways on fail-over IP environment
+ Package to install on the Ganeti cluster.
