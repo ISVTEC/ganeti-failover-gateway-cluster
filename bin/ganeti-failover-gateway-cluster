@@ -41,6 +41,7 @@ gnt-cluster command ip route show \
     | sort -u > $tempfile
 
 # Move temporary file to the final destination
+chmod 644 $tempfile
 mv $tempfile $target
 
 # Remove lock
